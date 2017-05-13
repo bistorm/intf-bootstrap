@@ -422,12 +422,6 @@ function crear_formulario(formulario)
 
 	for(i=0; i<this.componentes.length; i++)
 	{
-		/*switch(this.componentes[i].tipo)
-		{
-			case "file":
-				this.componentes_str += new crear_componente_input (this.componentes[i]).texto_html;
-			break;
-		}*/	
 		this.componentes_str += formulario.componentes[i].texto_html;
 	}
 
@@ -442,25 +436,51 @@ function crear_formulario(formulario)
 function crear_componente_input(componente_input)
 {
 	this.etiqueta = componente_input.etiqueta;
+	this.etiqueta_final = componente_input.etiqueta_final;
 	this.input_id = componente_input.input_id;
 	this.input_nombre = componente_input.input_nombre;
 	this.input_clases = componente_input.input_clases || [];
-	this.tipo = componente_input.tipo;
+	this.tipo = componente_input.tipo; 	//button, checkbox, color, date, datetime-local, email, file, hidden, image
+										//month, number, password radio, range, reset, search, submit, tel, text
+										//time, url, week
 	this.input_prop = componente_input.input_prop || "";
+	this.valor = componente_input.valor;
 
 	this.input_id_str = inbo_añadir_id(this.input_id);
-	this.input_clases_str = inbo_añadir_clases(this.input_clases);
+	this.input_clases_str = inbo_añadir_clases_y_etiqueta(this.input_clases);
 	this.input_nombre_str = inbo_añadir_nombre(this.input_nombre);
 	this.tipo_str = inbo_añadir_tipo(this.tipo);
+	this.valor_str = inbo_añadir_valor(this.valor);
 
 	this.texto_html = "<div class='form-group'>";
+
 	if(this.etiqueta != undefined)
 	{
 		this.texto_html += "<label class='col-md-4 control-label' for='"+this.input_id+"'>"+this.etiqueta+"</label>";
 	}
-	this.texto_html += "<div class='col-md-4'>";
-	this.texto_html += "<input "+this.input_id_str+" "+this.input_nombre_str+" class='"+this.input_clases_str+"' "+this.tipo_str+" "+this.input_prop+">";
-	this.texto_html += "</div> </div>";
+
+	if(this.etiqueta != undefined && this.etiqueta_final != undefined)
+	{
+		this.texto_html += "<div class='col-md-4'>";
+	}
+	else if(this.etiqueta == undefined && this.etiqueta_final == undefined)
+	{
+		this.texto_html += "<div class='col-md-12'>";
+	}
+	else
+	{
+		this.texto_html += "<div class='col-md-8'>";
+	}
+	
+	this.texto_html += "<input "+this.input_id_str+" "+this.input_nombre_str+" "+this.input_clases_str+" "+this.tipo_str+" "+this.valor_str+" "+this.input_prop+">";
+	this.texto_html += "</div>";
+
+	if(this.etiqueta_final != undefined)
+	{
+		this.texto_html += "<div class='col-md-4'>"+this.etiqueta_final+"</div>";
+	}
+
+	this.texto_html += "</div>";
 }
 
 function crear_componente_select(componente_select)
